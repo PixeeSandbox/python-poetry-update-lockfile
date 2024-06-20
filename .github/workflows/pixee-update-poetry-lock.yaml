@@ -1,0 +1,34 @@
+name: Update Poetry Lock
+
+on:
+  push:
+    paths:
+      - 'pyproject.toml'
+  pull_request:
+    paths:
+      - 'pyproject.toml'
+
+jobs:
+  update-lock-file:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9' # Specify your Python version here
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Generate lock file
+        run: poetry update
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: ":art: Update Poetry lock file"
